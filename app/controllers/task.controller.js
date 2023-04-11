@@ -16,14 +16,28 @@ exports.create = (req, res) => {
     user_id: req.body.user_id,
     msUserId: req.body.user_id,
   };
-  task.create(task_data).then(data => {
-    res.send(data);
-  }).catch(err => {
+  user.findByPk(task_data.user_id).then((user) => {
+    if (!user) {
+      res.status(404).send({
+        message: `Cannot find User with id=${task_data.user_id}.`
+      });
+    }
+    task.create(task_data).then(data => {
+      res.send(data);
+    }).catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the task."
+      });
+    });
+
+  }).catch((err) => {
+    console.log(">> Error while adding Group to User: ", err);
     res.status(500).send({
-      message:
-        err.message || "Some error occurred while creating the task."
+      message: err
     });
   });
+  
 };
 
 exports.findAll = (req, res) => {
@@ -66,23 +80,36 @@ exports.update = (req, res) => {
     msUserId: req.body.user_id,
   };
 
-  task.update(task_data, {
-    where: { id: id }
-  }).then(num => {
-    if (num == 1) {
-      res.send({
-        message: "Task was updated successfully."
-      });
-    } else {
-      res.send({
-        message: `Cannot update task with id=${id}. Maybe task was not found or req.body is empty!`
+  user.findByPk(task_data.user_id).then((user) => {
+    if (!user) {
+      res.status(404).send({
+        message: `Cannot find User with id=${task_data.user_id}.`
       });
     }
-  }).catch(err => {
+    task.update(task_data, {
+      where: { id: id }
+    }).then(num => {
+      if (num == 1) {
+        res.send({
+          message: "Task was updated successfully."
+        });
+      } else {
+        res.send({
+          message: `Cannot update task with id=${id}. Maybe task was not found or req.body is empty!`
+        });
+      }
+    }).catch(err => {
+      res.status(500).send({
+        message: "Error updating task with id=" + id
+      });
+    });
+  }).catch((err) => {
+    console.log(">> Error while adding Group to User: ", err);
     res.status(500).send({
-      message: "Error updating task with id=" + id
+      message: err
     });
   });
+  
 };
 
 exports.delete = (req, res) => {
