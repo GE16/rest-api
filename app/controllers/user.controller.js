@@ -1,6 +1,7 @@
 const db = require("../models");
 const user = db.user;
 const group = db.group;
+const task = db.task;
 // Create and Save a new user
 exports.create = (req, res) => {
 
@@ -37,7 +38,7 @@ exports.findAll = (req, res) => {
         through: {
           attributes: [],
         }
-      },
+      },"task"
     ],
   }).then(data => {
     res.send(data);
@@ -60,7 +61,7 @@ exports.findOne = (req, res) => {
         through: {
           attributes: [],
         }
-      },
+      },"task"
     ],
   }).then(data => {
     if (data) {
