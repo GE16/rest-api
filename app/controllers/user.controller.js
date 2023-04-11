@@ -2,7 +2,6 @@ const db = require("../models");
 const user = db.user;
 const group = db.group;
 const task = db.task;
-// Create and Save a new user
 exports.create = (req, res) => {
 
   if (!req.body.name) {
@@ -23,7 +22,7 @@ exports.create = (req, res) => {
   }).catch(err => {
     res.status(500).send({
       message:
-        err.message || "Some error occurred while creating the Tutorial."
+        err.message || "Some error occurred while creating the User."
     });
   });
 };

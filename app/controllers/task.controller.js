@@ -1,7 +1,6 @@
 const db = require("../models");
 const user = db.user;
 const task = db.task;
-const group = db.group;
 
 exports.create = (req, res) => {
   if (!req.body.name) {

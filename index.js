@@ -10,17 +10,13 @@ var corsOptions = {
 
 app.use(cors(corsOptions));
 
-// parse requests of content-type - application/json
 app.use(express.json());
 
-// parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
-// simple route
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to API application." });
 });
-
 
 const db = require("./app/models");
 db.sequelize.sync()
@@ -31,7 +27,6 @@ db.sequelize.sync()
     console.log("Failed to sync db: " + err.message);
   });
 
-// set port, listen for requests
 const api_main = require('./app/router/index.router')
 app.use('/', api_main)
 const PORT = process.env.PORT || 8080;
